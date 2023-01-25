@@ -1,17 +1,18 @@
 import sqlite3
-import datetime
 import os
 
-from .objects import (
+from ..objects import (
+    RelayedData,
+    RestartData,
     Relayed,
-    RestartInfo
+    Restart
 )
 
 """
 INITIALIZE EVERYTHING
 """
 
-RESET_ANYWAYS = True
+RESET_ANYWAYS = False
 
 DB_FILE = "snow.db"
 initialize = not os.path.exists(DB_FILE)
@@ -33,23 +34,48 @@ WRITING
 """
 
 
-def add_relayed_data(relayed: Relayed):
+def write_relayed_data(relayed: RelayedData):
     """
     :param relayed:
     :return:
     """
 
-    insert_query = "INSERT INTO Relayed VALUES (?, ?, ?, ?);"
+    insert_query = "INSERT OR IGNORE INTO Relayed VALUES (?, ?, ?, ?);"
     cursor.executemany(insert_query, relayed.get_database_values())
     connection.commit()
 
 
-def add_restart(restarts: RestartInfo):
+def write_restarts(restarts: RestartData):
     """
     :param restarts:
     :return:
     """
 
-    insert_query = "INSERT INTO Restart VALUES (?);"
+    insert_query = "INSERT OR IGNORE INTO Restart VALUES (?);"
     cursor.executemany(insert_query, restarts.get_database_values())
     connection.commit()
+
+
+"""
+READING
+"""
+
+
+def get_relayed_data() -> RelayedData:
+    relayed_data = RelayedData()
+
+    cursor.execute("SELECT * FROM Relayed;")
+    for row in cursor.fetchall():
+        relayed_data.append(Relayed(row[0], row[1], row[2], row[3]))
+
+    return relayed_data
+
+
+def get_restart_data() -> RestartData:
+    restart_list = RestartData()
+
+    cursor.execute("SELECT * FROM Restart;")
+    for row in cursor.fetchall():
+        restart_list.append(Restart(row[0]))
+
+    return restart_list

@@ -1,19 +1,19 @@
 from datetime import datetime
 
-from .objects import (
-    Hourly,
+from ..objects import (
     Relayed,
+    RelayedData,
     Restart,
-    RestartInfo
+    RestartData
 )
 
-from .binding import add_restart, add_relayed_data
+from .binding import write_restarts, write_relayed_data
 
 
 DATE_FORMAT = "%Y/%m/%d %H:%M:%S"
 
 
-def process_line(line: str, relayed_data: Relayed, restart_data: RestartInfo):
+def process_line(line: str, relayed_data: RelayedData, restart_data: RestartData):
     line = line.strip()
     if line == "":
         return
@@ -26,7 +26,7 @@ def process_line(line: str, relayed_data: Relayed, restart_data: RestartInfo):
         return
 
     if message == "Proxy starting":
-        restart_data.restart_list.append(Restart(timestamp=timestamp))
+        restart_data.append(Restart(timestamp=timestamp))
         return
 
     # disgusting but ehh what the hell :3
@@ -37,16 +37,16 @@ def process_line(line: str, relayed_data: Relayed, restart_data: RestartInfo):
     message = message[message.find("↓ ") + 2:]
     download = int(message[:message.find(" ")])
 
-    relayed_data.hourly_infos.append(Hourly(timestamp=timestamp, connections=connections, upload=upload, download=download))
+    relayed_data.append(Relayed(timestamp=timestamp, connections=connections, upload=upload, download=download))
 
 
 def read_logs(path: str):
-    relayed_data = Relayed()
-    restart_data = RestartInfo()
+    relayed_data = RelayedData()
+    restart_data = RestartData()
 
     with open(path, "r") as log_file:
         for line in log_file:
             process_line(line, relayed_data, restart_data)
 
-    add_restart(restart_data)
-    add_relayed_data(relayed_data)
+    write_restarts(restart_data)
+    write_relayed_data(relayed_data)
