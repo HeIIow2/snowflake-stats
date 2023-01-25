@@ -1,5 +1,7 @@
 # Averages by Hour
 
+![hourly](../analyzed/assets/hourly_connections.svg) 
+
  Hour | Connections | Uploads ↑ | Downloads ↓
 ---|---|---|---
 01 AM | 6.75 | 46.52 MB | 3.96 MB
@@ -29,7 +31,9 @@
 
 # Averages by Week
 
- Weekday | Connections | Uploads ↑ | Downloads ↓
+![weekly](../analyzed/assets/weekly_connections.svg) 
+
+  Weekday | Connections | Uploads ↑ | Downloads ↓
 ---|---|---|---
 Monday  | 11.42 | 53.54 MB | 8.87 MB
 Tuesday | 10.79 | 49.56 MB | 5.66 MB
@@ -41,13 +45,15 @@ Sunday | 14.43 | 63.86 MB | 13.61 MB
 
 # Totals
 
+ ![global](../analyzed/assets/global_connections.svg) 
+
  Connections | Uploads ↑ | Downloads ↓
 ---|---|---
 1.29 thousand | 5.98 GB | 1.10 GB
 
 # Global Averages
 
- Connections | Uploads ↑ | Downloads ↓
+  Connections | Uploads ↑ | Downloads ↓
 ---|---|---
 13.20 | 61.03 MB | 11.20 MB
 
